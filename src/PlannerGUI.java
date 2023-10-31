@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class PlannerGUI {
     private Frame frame;
     private List<Food> availableFoods;
@@ -103,7 +104,7 @@ public class PlannerGUI {
 
     private double parseGrams(String value) {
         if (value.endsWith("mg")) {
-            return Double.parseDouble(value.substring(0, value.length() - 2)) / 1000.0
+            return Double.parseDouble(value.substring(0, value.length() - 2)) / 1000.0;
         } else if (value.endsWith("g")) {
             return Double.parseDouble(value.substring(0, value.length() - 1));
         } else {
