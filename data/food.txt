@@ -1,0 +1,29 @@
+Apple:95:0.3g:25g:0.5g:4g:2g:1mg
+Banana:105:0.3g:27g:1.3g:14g:1g:1mg
+Orange:62:0.2g:15g:1.2g:12g:1g:0mg
+Grapes:69:0.2g:18g:0.7g:16g:2g:2mg
+Strawberries:4:0.1g:1g:0.7g:1g:0.3g:0mg
+Blueberries:29:0.3g:7g:0.3g:5g:1g:1mg
+Pineapple:50:0.1g:13g:0.5g:10g:1g:1mg
+Watermelon:30:0.2g:8g:0.6g:6g:1g:1mg
+Carrot:41:0.2g:10g:2g:5g:2g:69mg
+Broccoli:31:0.3g:6g:2.4g:1g:0.3g:33mg
+Spinach:7:0.1g:1g:0.7g:0.1g:0.1g:24mg
+Lettuce:5:0.1g:1g:0.5g:0.5g:0.5g:5mg
+Tomato:18:0.2g:4g:0.9g:2g:2g:6mg
+Cucumber:16:0.1g:4g:0.7g:1g:1g:2mg
+Chicken Breast:165:3.6g:0g:31g:0g:0g:50mg
+Salmon:206:13g:0g:20g:0g:0g:50mg
+Tofu:144:8g:3g:16g:2g:0.7g:6mg
+Egg:68:5g:0.6g:6g:0g:0.6g:68mg
+Brown Rice:216:1.6g:45g:5g:0g:0g:2mg
+Quinoa:120:1.9g:21g:4g:1g:0g:5mg
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
+Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
