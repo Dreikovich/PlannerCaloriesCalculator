@@ -2,10 +2,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Meal {
+    private String name;
     private List<Food> meal;
 
-    public Meal() {
-        meal = new ArrayList<>();
+    public Meal(String name, List<Food> foods) {
+        this.name = name;
+        this.meal = foods;
     }
 
     public void addFoodToMeal(Food food) {
@@ -14,6 +16,9 @@ public class Meal {
 
     public List<Food> getMeal(){
         return meal;
+    }
+    public String getName() {
+        return name;
     }
 
 

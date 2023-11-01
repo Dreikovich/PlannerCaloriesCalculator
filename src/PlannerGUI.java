@@ -1,6 +1,11 @@
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +17,13 @@ public class PlannerGUI {
     private List<Food> availableFoods;
     private List<Food> selectedFoods;
     private List<Food> meal;
+    private List<Meal> meals;
     private  Map<String, Checkbox> foodCheckboxes;
 
     private TextArea selectedFoodsTextArea;
 
     public PlannerGUI() {
+        meals = new ArrayList<>();
         frame = new Frame("Planner Page");
         frame.setLayout(new BorderLayout());
 
@@ -68,10 +75,13 @@ public class PlannerGUI {
                         }
                     }
                 }
-                meal = new ArrayList<>();
-                meal.addAll(selectedFoods);
+
                 PrintSelectedFoodInTheConsole();
                 updateSelectedFoodsTextArea();
+                System.out.println("selectedFoods size: " + selectedFoods.size());
+                Meal meal = new Meal("Meal " + (meals.size() + 1), selectedFoods);
+                meals.add(meal);
+                System.out.println("Meal saved: " + meal.getName());
 
             }
         });
@@ -85,10 +95,11 @@ public class PlannerGUI {
             }
         });
 
-        Button viewMealButton = new Button("View Meal");
-        viewMealButton.addActionListener(new ActionListener() {
+        Button viewMealsButton = new Button("View Meal");
+        viewMealsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Current Meal: " + meal);
+                System.out.println("Current Meals: " + meals);
+                displayMeals();
             }
         });
 
@@ -101,13 +112,12 @@ public class PlannerGUI {
         Panel buttonPanel = new Panel(new GridLayout(0,1));
         buttonPanel.add(showAvailableFoodButton);
         buttonPanel.add(addFoodToTheMealButton);
-        buttonPanel.add(viewMealButton);
+        buttonPanel.add(viewMealsButton);
         buttonPanel.add(addCustomFoodToTheFoodData);
         buttonPanel.add(refreshButton);
 
         // Adding components to the frame
         frame.add(buttonPanel, BorderLayout.SOUTH);
-        /*frame.add(viewMealButton, BorderLayout.SOUTH);*/
         frame.pack();
         frame.setVisible(true);
     }
@@ -175,7 +185,7 @@ public class PlannerGUI {
 
     private void updateSelectedFoodsTextArea() {
         selectedFoodsTextArea.setText("");
-        Font font = new Font("Arial", Font.PLAIN, 14); // Customize font (you can adjust the font name, style, and size)
+        Font font = new Font("Arial", Font.PLAIN, 14); // Create a font
         selectedFoodsTextArea.setFont(font);
         selectedFoodsTextArea.setBackground(Color.WHITE); // Set background color
         selectedFoodsTextArea.setEditable(false); // Make it non-editable
@@ -191,4 +201,60 @@ public class PlannerGUI {
             selectedFoodsTextArea.append("Sodium: " + food.getSodium() + "g\n\n");
         }
     }
+
+    private void displayMeals() {
+        JFrame mealsFrame = new JFrame("Meals");
+        int maxFoodCount = 0;
+
+        for (Meal meal : meals) {
+            int foodCount = meal.getMeal().size();
+            if (foodCount > maxFoodCount) {
+                maxFoodCount = foodCount;
+            }
+        }
+
+        String[][] data = new String[meals.size()][maxFoodCount + 1];
+        String[] columns = new String[maxFoodCount + 1];
+
+        columns[0] = "Meal Number";
+        for (int i = 0; i < maxFoodCount; i++) {
+            columns[i + 1] = "Food " + (i + 1);
+        }
+
+        for (int i = 0; i < meals.size(); i++) {
+            Meal meal = meals.get(i);
+            String[] rowData = new String[maxFoodCount + 1];
+            rowData[0] = "Meal " + (i + 1); // Meal number
+            List<Food> foods = meal.getMeal();
+            for (int j = 0; j < foods.size(); j++) {
+                Food food = foods.get(j);
+                rowData[j + 1] = food.getFoodItem() + " (Calories: " + food.getCalories() +
+                        ", Proteins: " + food.getProtein() +
+                        ", Fats: " + food.getFats() +
+                        ", Carbs: " + food.getCarbs() +
+                        ", Sodium: " + food.getSodium() +
+                        ", Sugar: " + food.getSugar() + ")";
+            }
+            data[i] = rowData;
+        }
+
+        // Create a table model
+        DefaultTableModel model = new DefaultTableModel(data, columns);
+        JTable table = new JTable(model);
+        mealsFrame.add(new JScrollPane(table));
+        mealsFrame.pack();
+        mealsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mealsFrame.setVisible(true);
+        mealsFrame.setSize(1000, 600);
+
+        mealsFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                mealsFrame.dispose();
+            }
+        });
+    }
+
+
+
 }
