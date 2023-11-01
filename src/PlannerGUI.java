@@ -13,22 +13,44 @@ public class PlannerGUI {
     private List<Food> selectedFoods;
     private List<Food> meal;
     private  Map<String, Checkbox> foodCheckboxes;
+
+    private TextArea selectedFoodsTextArea;
+
     public PlannerGUI() {
         frame = new Frame("Planner Page");
         frame.setLayout(new BorderLayout());
-        availableFoods = readAvailableFoodsFromFile();
-        foodCheckboxes = new HashMap<>();
-        for (Food food : availableFoods) {
-            Checkbox checkbox = new Checkbox(food.getFoodItem());
-            foodCheckboxes.put(food.getFoodItem(), checkbox);
-        }
-        Panel checkboxPanel = new Panel(new GridLayout(foodCheckboxes.size(), 1));
-        for (Checkbox checkbox : foodCheckboxes.values()) {
-            checkboxPanel.add(checkbox);
 
-        }
-        frame.add(checkboxPanel, BorderLayout.NORTH);
+        availableFoods = RefreshData.getAvailableFoods();
+
+        foodCheckboxes = new HashMap<>();
+
+        Panel checkboxPanel = new Panel(new GridLayout(0, 1));
+        frame.add(checkboxPanel, BorderLayout.WEST);
+
+        selectedFoodsTextArea = new TextArea(10, 30);
+        selectedFoodsTextArea.setVisible(false);
+        frame.add(selectedFoodsTextArea, BorderLayout.CENTER);
+
+        Button showAvailableFoodButton = new Button("Show Available Food");
         Button addFoodToTheMealButton = new Button("Add food to the meal");
+        Button addCustomFoodToTheFoodData = new Button("Add custom food");
+        Button refreshButton = new Button("Refresh Data");
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                availableFoods = RefreshData.getAvailableFoods();
+                System.out.println("Data refreshed. The size of available data now is " + availableFoods.size());
+                showAvailableFoodCheckboxes(checkboxPanel);
+
+            }
+        });
+
+        showAvailableFoodButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showAvailableFoodCheckboxes(checkboxPanel);
+            }
+        });
         addFoodToTheMealButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,6 +71,16 @@ public class PlannerGUI {
                 meal = new ArrayList<>();
                 meal.addAll(selectedFoods);
                 PrintSelectedFoodInTheConsole();
+                updateSelectedFoodsTextArea();
+
+            }
+        });
+
+        addCustomFoodToTheFoodData.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CustomFoodDialogGUI customFoodDialogGUI = new CustomFoodDialogGUI(frame);
+                frame.setVisible(false);
 
             }
         });
@@ -60,11 +92,22 @@ public class PlannerGUI {
             }
         });
 
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                System.exit(0);
+            }
+        });
+
+        Panel buttonPanel = new Panel(new GridLayout(0,1));
+        buttonPanel.add(showAvailableFoodButton);
+        buttonPanel.add(addFoodToTheMealButton);
+        buttonPanel.add(viewMealButton);
+        buttonPanel.add(addCustomFoodToTheFoodData);
+        buttonPanel.add(refreshButton);
 
         // Adding components to the frame
-
-        frame.add(addFoodToTheMealButton, BorderLayout.CENTER);
-        frame.add(viewMealButton, BorderLayout.SOUTH);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        /*frame.add(viewMealButton, BorderLayout.SOUTH);*/
         frame.pack();
         frame.setVisible(true);
     }
@@ -96,6 +139,24 @@ public class PlannerGUI {
         return foods;
     }
 
+    private void showAvailableFoodCheckboxes(Panel checkboxPanel) {
+        // Create checkboxes for available foods
+        checkboxPanel.removeAll();
+        foodCheckboxes.clear();
+        for (Food food : availableFoods) {
+            Checkbox checkbox = new Checkbox(food.getFoodItem());
+            foodCheckboxes.put(food.getFoodItem(), checkbox);
+        }
+        for (Checkbox checkbox : foodCheckboxes.values()) {
+            checkboxPanel.add(checkbox);
+
+        }
+        frame.add(checkboxPanel, BorderLayout.WEST);
+        selectedFoodsTextArea.setVisible(true);
+        frame.pack();
+
+    }
+
     private void PrintSelectedFoodInTheConsole(){
         for(Food food : selectedFoods ){
             food.toString();
@@ -109,6 +170,25 @@ public class PlannerGUI {
             return Double.parseDouble(value.substring(0, value.length() - 1));
         } else {
             return 0.0;
+        }
+    }
+
+    private void updateSelectedFoodsTextArea() {
+        selectedFoodsTextArea.setText("");
+        Font font = new Font("Arial", Font.PLAIN, 14); // Customize font (you can adjust the font name, style, and size)
+        selectedFoodsTextArea.setFont(font);
+        selectedFoodsTextArea.setBackground(Color.WHITE); // Set background color
+        selectedFoodsTextArea.setEditable(false); // Make it non-editable
+
+        for (Food food : selectedFoods) {
+            selectedFoodsTextArea.append("Name: " + food.getFoodItem() + "\n");
+            selectedFoodsTextArea.append("Calories: " + food.getCalories() + "\n");
+            selectedFoodsTextArea.append("Fats: " + food.getFats() + "g\n");
+            selectedFoodsTextArea.append("Carbs: " + food.getCarbs() + "g\n");
+            selectedFoodsTextArea.append("Proteins: " + food.getProtein() + "g\n");
+            selectedFoodsTextArea.append("Fiber: " + food.getFiber() + "g\n");
+            selectedFoodsTextArea.append("Sugar: " + food.getSugar() + "g\n");
+            selectedFoodsTextArea.append("Sodium: " + food.getSodium() + "g\n\n");
         }
     }
 }

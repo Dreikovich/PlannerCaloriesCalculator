@@ -41,6 +41,7 @@ public class LoginGUI {
                 if (isAuthenticated) {
                     System.out.println("User authenticated successfully");
                     loginController.openPlannerGui();
+                    closeLoginWindowAfterSuccessfulAuthentication(frame);
 
                 } else {
                     System.out.println("Authentication failed. Invalid username or password.");
@@ -56,6 +57,10 @@ public class LoginGUI {
                 System.exit(0);
             }
         });
+    }
+
+    public void closeLoginWindowAfterSuccessfulAuthentication(Frame loginFrame){
+        loginFrame.dispose();
     }
 
     public static void main(String[] args) {

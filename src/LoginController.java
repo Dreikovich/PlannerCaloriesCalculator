@@ -15,7 +15,11 @@ public class LoginController {
         }
         return false;
     }
-    public void openPlannerGui() {
+       public void openPlannerGui() {
         PlannerGUI plannerGUI = new PlannerGUI();
     }
+
+
+
+
 }
