@@ -18,7 +18,6 @@ public class PlannerGUI {
     private List<Food> selectedFoods;
     private final List<Meal> meals;
     private final  Map<String, Checkbox> foodCheckboxes;
-
     private final TextArea selectedFoodsTextArea;
     private JFrame mealsFrame;
 
@@ -187,39 +186,23 @@ public class PlannerGUI {
         }
     }
 
-    private void displayMeals() {
-
+    private void initializeMealsFrame() {
         if (mealsFrame == null) {
             mealsFrame = new JFrame("Meals");
             mealsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             mealsFrame.setSize(1000, 600);
             mealsFrame.setLayout(new BorderLayout());
-        }
-        else{
+        } else {
             mealsFrame.getContentPane().removeAll();
         }
-        int maxFoodCount = 0;
+    }
 
-        for (Meal meal : meals) {
-            int foodCount = meal.getMeal().size();
-            if (foodCount > maxFoodCount) {
-                maxFoodCount = foodCount;
-            }
-        }
-
+    private String[][] prepareTableData(int maxFoodCount) {
         String[][] data = new String[meals.size()][maxFoodCount + 2];
-        String[] columns = new String[maxFoodCount + 2];
-
-        columns[0] = "Meal Number";
-        for (int i = 0; i < maxFoodCount; i++) {
-            columns[i + 1] = "Food " + (i + 1);
-        }
-        columns[maxFoodCount + 1] = "Remove";
-
         for (int i = 0; i < meals.size(); i++) {
             Meal meal = meals.get(i);
             String[] rowData = new String[maxFoodCount + 2];
-            rowData[0] = "Meal " + (i + 1); // Meal number
+            rowData[0] = "Meal " + (i + 1);
             List<Food> foods = meal.getMeal();
             for (int j = 0; j < foods.size(); j++) {
                 Food food = foods.get(j);
@@ -230,60 +213,38 @@ public class PlannerGUI {
                         ", Sodium: " + food.getSodium() +
                         ", Sugar: " + food.getSugar() + ")";
             }
-            // Remove button
-            data[i] = rowData;
             rowData[maxFoodCount + 1] = "X";
+            data[i] = rowData;
         }
+        return data;
+    }
 
-        // Create a table model
-        DefaultTableModel model = new DefaultTableModel(data, columns);
-        JTable table = new JTable(model);
-        int finalMaxFoodCount = maxFoodCount;
-         /*table.addMouseListener(new MouseAdapter() {
+    private DefaultTableModel createTableModel(String[][] data, String[] columns) {
+        return new DefaultTableModel(data, columns);
+    }
+
+    private DefaultTableCellRenderer createTableCellRenderer(int finalMaxFoodCount) {
+        return new DefaultTableCellRenderer() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                int column = table.getColumnModel().getColumnIndex("Remove");
-                int row = table.rowAtPoint(e.getPoint());
-                if (column == finalMaxFoodCount + 1 && row >= 0) {
-
-                    model.removeRow(row);
-                    meals.remove(row);
-
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (column == finalMaxFoodCount + 1) {
+                    component.setBackground(Color.RED);
+                    component.setForeground(Color.WHITE);
+                    ((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
+                } else {
+                    component.setBackground(table.getBackground());
                 }
+                return component;
             }
-        });*/
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            if (column == finalMaxFoodCount + 1) {
-                component.setBackground(Color.RED);
-                component.setForeground(Color.WHITE);
-                ((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
-                // create the click listener for the cell renderer to remove the row when clicked in the meal doesnt work solved here:
-                // https://stackoverflow.com/questions/7612569/how-to-add-mouse-listener-to-a-component-in-a-custom-jtable-header-cell-renderer
-            }
-
-            else {
-                component.setBackground(table.getBackground());
-            }
-            return component;
-        }
         };
-        if(!meals.isEmpty()){
-            MealCalculator mealCalculator = new MealCalculator();
-            double totalCalories = mealCalculator.calculateCaloriesInOneMeal(meals.get(0).getMeal());
-            System.out.println("Total calories in meal 1: " + totalCalories);
-            System.out.println(MealCalculator.calculateCaloriesInAllMeal(meals));
-        }
+    }
 
-
-
-        table.getColumnModel().getColumn(finalMaxFoodCount + 1).setCellRenderer(renderer);
+    private void addRemoveMouseListener(JTable table, DefaultTableModel model, int finalMaxFoodCount) {
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int column =  table.columnAtPoint(e.getPoint());
+                int column = table.columnAtPoint(e.getPoint());
                 int row = table.rowAtPoint(e.getPoint());
                 if (column == finalMaxFoodCount + 1 && row >= 0) {
                     model.removeRow(row);
@@ -291,21 +252,60 @@ public class PlannerGUI {
                 }
             }
         });
+    }
+    private int calculateMaxFoodCount() {
+        int maxFoodCount = 0;
+        for (Meal meal : meals) {
+            int foodCount = meal.getMeal().size();
+            if (foodCount > maxFoodCount) {
+                maxFoodCount = foodCount;
+            }
+        }
+        return maxFoodCount;
+    }
+
+    private String[] prepareColumns(int maxFoodCount) {
+        String[] columns = new String[maxFoodCount + 2];
+        columns[0] = "Meal Number";
+        for (int i = 0; i < maxFoodCount; i++) {
+            columns[i + 1] = "Food " + (i + 1);
+        }
+        columns[maxFoodCount + 1] = "Remove";
+        return columns;
+    }
+
+    private void configureAndShowMealsFrame(DefaultTableModel model, JTable table, int finalMaxFoodCount) {
         table.setRowHeight(30);
         table.setShowVerticalLines(true);
+        table.getColumnModel().getColumn(finalMaxFoodCount + 1).setCellRenderer(createTableCellRenderer(finalMaxFoodCount));
         mealsFrame.add(new JScrollPane(table));
         mealsFrame.pack();
-        mealsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         mealsFrame.setVisible(true);
-        mealsFrame.setSize(1000, 600);
-
+        mealsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mealsFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 mealsFrame.dispose();
             }
         });
+    }
+
+    public void displayMeals() {
+        initializeMealsFrame();
+
+        int maxFoodCount = calculateMaxFoodCount();
+
+        String[] columns = prepareColumns(maxFoodCount);
+
+        String[][] data = prepareTableData(maxFoodCount);
+
+        DefaultTableModel model = createTableModel(data, columns);
+
+        JTable table = new JTable(model);
+
+        addRemoveMouseListener(table, model, maxFoodCount);
+
+        configureAndShowMealsFrame(model, table, maxFoodCount);
     }
 
 }
