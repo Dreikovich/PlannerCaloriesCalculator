@@ -260,7 +260,8 @@ public class PlannerGUI {
                 component.setBackground(Color.RED);
                 component.setForeground(Color.WHITE);
                 ((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
-                // create the click listener for the cell renderer to remove the row when clicked in the meal
+                // create the click listener for the cell renderer to remove the row when clicked in the meal doesnt work solved here:
+                // https://stackoverflow.com/questions/7612569/how-to-add-mouse-listener-to-a-component-in-a-custom-jtable-header-cell-renderer
             }
 
             else {
