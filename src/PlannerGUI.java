@@ -21,6 +21,12 @@ public class PlannerGUI {
     private final TextArea selectedFoodsTextArea;
     private JFrame mealsFrame;
 
+    private JTextField caloriesField;
+    private JTextField proteinsField;
+    private JTextField fatsField;
+    private JTextField carbsField;
+
+
 
     public PlannerGUI() {
         meals = new ArrayList<>();
@@ -306,6 +312,33 @@ public class PlannerGUI {
         addRemoveMouseListener(table, model, maxFoodCount);
 
         configureAndShowMealsFrame(model, table, maxFoodCount);
+
+        caloriesField = new JTextField();
+        proteinsField = new JTextField();
+        fatsField = new JTextField();
+        carbsField = new JTextField();
+
+        Panel calculatorPanel = new Panel(new GridLayout(0, 2));
+        calculatorPanel.add(new Label("Calories:"));
+        calculatorPanel.add(caloriesField);
+        calculatorPanel.add(new Label("Proteins (g):"));
+        calculatorPanel.add(proteinsField);
+        calculatorPanel.add(new Label("Fats (g):"));
+        calculatorPanel.add(fatsField);
+        calculatorPanel.add(new Label("Carbs (g):"));
+        calculatorPanel.add(carbsField);
+
+        Button calculateCaloriesButton = new Button("Calculate Calories");
+        calculateCaloriesButton.addActionListener(e -> {
+            caloriesField.setText(String.valueOf(MealCalculator.calculateCaloriesInAllMeal(meals)));
+            proteinsField.setText(String.valueOf(MealCalculator.calculateProteinInAllMeal(meals)));
+            fatsField.setText(String.valueOf(MealCalculator.calculateFatsInAllMeal(meals)));
+            carbsField.setText(String.valueOf(MealCalculator.calculateCarbsInAllMeal(meals)));
+        });
+
+        calculatorPanel.add(calculateCaloriesButton);
+        mealsFrame.add(calculatorPanel, BorderLayout.SOUTH);
+
     }
 
 }
