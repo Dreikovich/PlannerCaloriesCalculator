@@ -1,9 +1,9 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -13,14 +13,15 @@ import java.util.Map;
 
 
 public class PlannerGUI {
-    private Frame frame;
+    private final Frame frame;
     private List<Food> availableFoods;
     private List<Food> selectedFoods;
-    private List<Food> meal;
-    private List<Meal> meals;
-    private  Map<String, Checkbox> foodCheckboxes;
+    private final List<Meal> meals;
+    private final  Map<String, Checkbox> foodCheckboxes;
 
-    private TextArea selectedFoodsTextArea;
+    private final TextArea selectedFoodsTextArea;
+    private JFrame mealsFrame;
+
 
     public PlannerGUI() {
         meals = new ArrayList<>();
@@ -42,65 +43,49 @@ public class PlannerGUI {
         Button addFoodToTheMealButton = new Button("Add food to the meal");
         Button addCustomFoodToTheFoodData = new Button("Add custom food");
         Button refreshButton = new Button("Refresh Data");
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                availableFoods = RefreshData.getAvailableFoods();
-                System.out.println("Data refreshed. The size of available data now is " + availableFoods.size());
-                showAvailableFoodCheckboxes(checkboxPanel);
+        refreshButton.addActionListener(e -> {
+            availableFoods = RefreshData.getAvailableFoods();
+            System.out.println("Data refreshed. The size of available data now is " + availableFoods.size());
+            showAvailableFoodCheckboxes(checkboxPanel);
 
-            }
         });
 
-        showAvailableFoodButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showAvailableFoodCheckboxes(checkboxPanel);
+        showAvailableFoodButton.addActionListener(e -> showAvailableFoodCheckboxes(checkboxPanel));
+        addFoodToTheMealButton.addActionListener(e -> {
+            selectedFoods = new ArrayList<>();
+            List<String> tempWithSelectedFoods = new ArrayList<>();
+            for (Map.Entry<String, Checkbox> entry : foodCheckboxes.entrySet()) {
+                if (entry.getValue().getState()) {
+                   tempWithSelectedFoods.add( entry.getKey());
+                }
             }
-        });
-        addFoodToTheMealButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                selectedFoods = new ArrayList<>();
-                List<String> tempWithSelectedFoods = new ArrayList<>();
-                for (Map.Entry<String, Checkbox> entry : foodCheckboxes.entrySet()) {
-                    if (entry.getValue().getState()) {
-                       tempWithSelectedFoods.add( entry.getKey());
+            for(Food food : availableFoods){
+                for(String filteredFoodBySelect : tempWithSelectedFoods){
+                    if(filteredFoodBySelect.equals(food.getFoodItem())){
+                        selectedFoods.add(food);
                     }
                 }
-                for(Food food : availableFoods){
-                    for(String filteredFoodBySelect : tempWithSelectedFoods){
-                        if(filteredFoodBySelect.equals(food.getFoodItem())){
-                            selectedFoods.add(food);
-                        }
-                    }
-                }
-
-                PrintSelectedFoodInTheConsole();
-                updateSelectedFoodsTextArea();
-                System.out.println("selectedFoods size: " + selectedFoods.size());
-                Meal meal = new Meal("Meal " + (meals.size() + 1), selectedFoods);
-                meals.add(meal);
-                System.out.println("Meal saved: " + meal.getName());
-
             }
+
+            PrintSelectedFoodInTheConsole();
+            updateSelectedFoodsTextArea();
+            System.out.println("selectedFoods size: " + selectedFoods.size());
+            Meal meal = new Meal("Meal " + (meals.size() + 1), selectedFoods);
+            meals.add(meal);
+            System.out.println("Meal saved: " + meal.getName());
+
         });
 
-        addCustomFoodToTheFoodData.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                CustomFoodDialogGUI customFoodDialogGUI = new CustomFoodDialogGUI(frame);
-                frame.setVisible(false);
+        addCustomFoodToTheFoodData.addActionListener(e -> {
+            CustomFoodDialogGUI customFoodDialogGUI = new CustomFoodDialogGUI(frame);
+            frame.setVisible(false);
 
-            }
         });
 
         Button viewMealsButton = new Button("View Meal");
-        viewMealsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Current Meals: " + meals);
-                displayMeals();
-            }
+        viewMealsButton.addActionListener(e -> {
+            System.out.println("Current Meals: " + meals);
+            displayMeals();
         });
 
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -203,7 +188,16 @@ public class PlannerGUI {
     }
 
     private void displayMeals() {
-        JFrame mealsFrame = new JFrame("Meals");
+
+        if (mealsFrame == null) {
+            mealsFrame = new JFrame("Meals");
+            mealsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            mealsFrame.setSize(1000, 600);
+            mealsFrame.setLayout(new BorderLayout());
+        }
+        else{
+            mealsFrame.getContentPane().removeAll();
+        }
         int maxFoodCount = 0;
 
         for (Meal meal : meals) {
@@ -213,17 +207,18 @@ public class PlannerGUI {
             }
         }
 
-        String[][] data = new String[meals.size()][maxFoodCount + 1];
-        String[] columns = new String[maxFoodCount + 1];
+        String[][] data = new String[meals.size()][maxFoodCount + 2];
+        String[] columns = new String[maxFoodCount + 2];
 
         columns[0] = "Meal Number";
         for (int i = 0; i < maxFoodCount; i++) {
             columns[i + 1] = "Food " + (i + 1);
         }
+        columns[maxFoodCount + 1] = "Remove";
 
         for (int i = 0; i < meals.size(); i++) {
             Meal meal = meals.get(i);
-            String[] rowData = new String[maxFoodCount + 1];
+            String[] rowData = new String[maxFoodCount + 2];
             rowData[0] = "Meal " + (i + 1); // Meal number
             List<Food> foods = meal.getMeal();
             for (int j = 0; j < foods.size(); j++) {
@@ -235,15 +230,72 @@ public class PlannerGUI {
                         ", Sodium: " + food.getSodium() +
                         ", Sugar: " + food.getSugar() + ")";
             }
+            // Remove button
             data[i] = rowData;
+            rowData[maxFoodCount + 1] = "X";
         }
 
         // Create a table model
         DefaultTableModel model = new DefaultTableModel(data, columns);
         JTable table = new JTable(model);
+        int finalMaxFoodCount = maxFoodCount;
+         /*table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                int column = table.getColumnModel().getColumnIndex("Remove");
+                int row = table.rowAtPoint(e.getPoint());
+                if (column == finalMaxFoodCount + 1 && row >= 0) {
+
+                    model.removeRow(row);
+                    meals.remove(row);
+
+                }
+            }
+        });*/
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            if (column == finalMaxFoodCount + 1) {
+                component.setBackground(Color.RED);
+                component.setForeground(Color.WHITE);
+                ((JLabel) component).setHorizontalAlignment(JLabel.CENTER);
+                // create the click listener for the cell renderer to remove the row when clicked in the meal
+            }
+
+            else {
+                component.setBackground(table.getBackground());
+            }
+            return component;
+        }
+        };
+        if(!meals.isEmpty()){
+            MealCalculator mealCalculator = new MealCalculator();
+            double totalCalories = mealCalculator.calculateCaloriesInOneMeal(meals.get(0).getMeal());
+            System.out.println("Total calories in meal 1: " + totalCalories);
+            System.out.println(MealCalculator.calculateCaloriesInAllMeal(meals));
+        }
+
+
+
+        table.getColumnModel().getColumn(finalMaxFoodCount + 1).setCellRenderer(renderer);
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int column =  table.columnAtPoint(e.getPoint());
+                int row = table.rowAtPoint(e.getPoint());
+                if (column == finalMaxFoodCount + 1 && row >= 0) {
+                    model.removeRow(row);
+                    meals.remove(row);
+                }
+            }
+        });
+        table.setRowHeight(30);
+        table.setShowVerticalLines(true);
         mealsFrame.add(new JScrollPane(table));
         mealsFrame.pack();
         mealsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         mealsFrame.setVisible(true);
         mealsFrame.setSize(1000, 600);
 
@@ -254,7 +306,5 @@ public class PlannerGUI {
             }
         });
     }
-
-
 
 }
