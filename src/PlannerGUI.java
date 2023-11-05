@@ -2,10 +2,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -36,7 +33,8 @@ public class PlannerGUI {
         foodCheckboxes = new HashMap<>();
 
         Panel checkboxPanel = new Panel(new GridLayout(0, 1));
-        frame.add(checkboxPanel, BorderLayout.WEST);
+        Panel containerPanel = new Panel();
+
 
         selectedFoodsTextArea = new TextArea(10, 30);
         selectedFoodsTextArea.setVisible(false);
@@ -49,27 +47,13 @@ public class PlannerGUI {
         refreshButton.addActionListener(e -> {
             availableFoods = RefreshData.getAvailableFoods();
             System.out.println("Data refreshed. The size of available data now is " + availableFoods.size());
-            showAvailableFoodCheckboxes(checkboxPanel);
+            showAvailableFoodCheckboxes(checkboxPanel, containerPanel);
 
         });
 
-        showAvailableFoodButton.addActionListener(e -> showAvailableFoodCheckboxes(checkboxPanel));
+        showAvailableFoodButton.addActionListener(e -> showAvailableFoodCheckboxes(checkboxPanel, containerPanel));
         addFoodToTheMealButton.addActionListener(e -> {
-            selectedFoods = new ArrayList<>();
-            List<String> tempWithSelectedFoods = new ArrayList<>();
-            for (Map.Entry<String, Checkbox> entry : foodCheckboxes.entrySet()) {
-                if (entry.getValue().getState()) {
-                   tempWithSelectedFoods.add( entry.getKey());
-                }
-            }
-            for(Food food : availableFoods){
-                for(String filteredFoodBySelect : tempWithSelectedFoods){
-                    if(filteredFoodBySelect.equals(food.getFoodItem())){
-                        selectedFoods.add(food);
-                    }
-                }
-            }
-
+            FillTheListSelectedFood();
             PrintSelectedFoodInTheConsole();
             updateSelectedFoodsTextArea();
             System.out.println("selectedFoods size: " + selectedFoods.size());
@@ -91,6 +75,18 @@ public class PlannerGUI {
             displayMeals();
         });
 
+        Button deleteSelectedFoodButton = new Button("Delete Selected Food");
+        deleteSelectedFoodButton.addActionListener(e -> {
+            FillTheListSelectedFood();
+            for(Food food : selectedFoods){
+                DataManager.deleteFood(food);
+                RefreshData.refreshAvailableFoods();
+                availableFoods = RefreshData.getAvailableFoods();
+                showAvailableFoodCheckboxes(checkboxPanel, containerPanel);
+
+            }
+        });
+
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 System.exit(0);
@@ -102,12 +98,31 @@ public class PlannerGUI {
         buttonPanel.add(addFoodToTheMealButton);
         buttonPanel.add(viewMealsButton);
         buttonPanel.add(addCustomFoodToTheFoodData);
+        buttonPanel.add(deleteSelectedFoodButton);
         buttonPanel.add(refreshButton);
 
         // Adding components to the frame
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.pack();
         frame.setVisible(true);
+    }
+
+    private void FillTheListSelectedFood(){
+        selectedFoods = new ArrayList<>();
+        List<String> tempWithSelectedFoods = new ArrayList<>();
+        for (Map.Entry<String, Checkbox> entry : foodCheckboxes.entrySet()) {
+            if (entry.getValue().getState()) {
+                tempWithSelectedFoods.add( entry.getKey());
+            }
+        }
+        for(Food food : availableFoods){
+            for(String filteredFoodBySelect : tempWithSelectedFoods){
+                if(filteredFoodBySelect.equals(food.getFoodItem())){
+                    selectedFoods.add(food);
+                }
+            }
+        }
+
     }
 
     private List<Food> readAvailableFoodsFromFile() {
@@ -137,15 +152,27 @@ public class PlannerGUI {
         return foods;
     }
 
-    private void showAvailableFoodCheckboxes(Panel checkboxPanel) {
+    private void showAvailableFoodCheckboxes(Panel checkboxPanel, Panel containerPanel) {
         // Create checkboxes for available foods
         checkboxPanel.removeAll();
         foodCheckboxes.clear();
+
+
+        int visibleCheckboxCount = 20;
+        int checkboxWidth = 200;
+        for (int i = 0; i < availableFoods.size() && i < visibleCheckboxCount; i++) {
+            Food food = availableFoods.get(i);
+            Checkbox checkbox = new Checkbox(food.getFoodItem());
+            // Set constant width for the checkbox
+            checkbox.setPreferredSize(new Dimension(checkboxWidth, 20));
+            foodCheckboxes.put(food.getFoodItem(), checkbox);
+            checkboxPanel.add(checkbox);
+        }
         // create checkboxes for available foods and insert them into the map table
-        for (Food food : availableFoods) {
+        /*for (Food food : availableFoods) {
             Checkbox checkbox = new Checkbox(food.getFoodItem());
             foodCheckboxes.put(food.getFoodItem(), checkbox);
-        }
+        }*/
         // Sort checkboxes alphabetically
         List<Map.Entry<String, Checkbox>> entryList = new ArrayList<>(foodCheckboxes.entrySet());
         Collections.sort(entryList, Comparator.comparing(Map.Entry::getKey));
@@ -153,7 +180,40 @@ public class PlannerGUI {
         for (Map.Entry<String, Checkbox> entry : entryList) {
             checkboxPanel.add(entry.getValue());
         }
-        frame.add(checkboxPanel, BorderLayout.WEST);
+        Scrollbar verticalScrollbar = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 0, availableFoods.size());
+
+
+        containerPanel.setLayout(new BorderLayout());
+        containerPanel.add(checkboxPanel, BorderLayout.CENTER);
+        containerPanel.add(verticalScrollbar, BorderLayout.EAST);
+        verticalScrollbar.addAdjustmentListener(new AdjustmentListener() {
+            @Override
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                int scrollbarValue = verticalScrollbar.getValue();
+                checkboxPanel.removeAll();
+
+                // Calculate the range of checkboxes to display based on the scrollbar value
+                int startIndex = scrollbarValue;
+                int endIndex = Math.min(startIndex + visibleCheckboxCount, availableFoods.size());
+                // If the end index is equal to the size of the available foods, then the start index should be adjusted
+                if(endIndex == availableFoods.size()){
+                    startIndex = endIndex - visibleCheckboxCount;
+                }
+                // Add checkboxes within the visible range to the panel
+                for(int i=startIndex;i<endIndex;i++){
+                    Checkbox checkbox = new Checkbox(availableFoods.get(i).getFoodItem());
+                    foodCheckboxes.put(availableFoods.get(i).getFoodItem(), checkbox);
+                    checkboxPanel.add(checkbox);
+                }
+                checkboxPanel.revalidate();
+                checkboxPanel.repaint();
+            }
+        });
+
+        checkboxPanel.setPreferredSize(new Dimension(checkboxWidth, visibleCheckboxCount * checkboxPanel.getComponent(0).getPreferredSize().height));
+        frame.add(containerPanel, BorderLayout.WEST);
+
+        /*frame.add(checkboxPanel, BorderLayout.WEST);*/
         selectedFoodsTextArea.setVisible(true);
         frame.pack();
 

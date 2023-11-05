@@ -1,37 +1,64 @@
-Apple:95:0.3g:25g:0.5g:4g:2g:1mg
-Banana:105:0.3g:27g:1.3g:14g:1g:1mg
-Orange:62:0.2g:15g:1.2g:12g:1g:0mg
-Grapes:69:0.2g:18g:0.7g:16g:2g:2mg
-Strawberries:4:0.1g:1g:0.7g:1g:0.3g:0mg
-Blueberries:29:0.3g:7g:0.3g:5g:1g:1mg
-Pineapple:50:0.1g:13g:0.5g:10g:1g:1mg
-Watermelon:30:0.2g:8g:0.6g:6g:1g:1mg
-Carrot:41:0.2g:10g:2g:5g:2g:69mg
-Broccoli:31:0.3g:6g:2.4g:1g:0.3g:33mg
-Spinach:7:0.1g:1g:0.7g:0.1g:0.1g:24mg
-Lettuce:5:0.1g:1g:0.5g:0.5g:0.5g:5mg
-Tomato:18:0.2g:4g:0.9g:2g:2g:6mg
-Cucumber:16:0.1g:4g:0.7g:1g:1g:2mg
-Chicken Breast:165:3.6g:0g:31g:0g:0g:50mg
-Salmon:206:13g:0g:20g:0g:0g:50mg
-Tofu:144:8g:3g:16g:2g:0.7g:6mg
-Egg:68:5g:0.6g:6g:0g:0.6g:68mg
-Brown Rice:216:1.6g:45g:5g:0g:0g:2mg
-Quinoa:120:1.9g:21g:4g:1g:0g:5mg
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Chicken Salad:350:12.5:15.0:30.0:5.0:2.0:450.0
-Boiled Potatoes:87:0.1:20.1:2.0:8.0:0.8:0.006
-something:111:11.0:4.0:4.0:4.0:4.0:4.0
-Fish:218:4.5:0.0:44.0:0.0:0.0:0.095
-f:1:1.0:1.0:1.0:1.0:1.0:1.0
-tea:10:0.0:0.0:0.0:0.0:0.0:0.0
-test:1:1.0:1.0:1.0:1.0:1.0:1.0
-toSava:9:9.0:9.0:1.0:1.0:1.0:1.0
-custom food 123:130:20.0:10.0:10.0:1.0:1.0:1.0
+Apples:95:0.3g:25g:0.5g:19g:0.5g:1mg
+Bananas:105:0.3g:27g:1.3g:14g:1g:1mg
+Grapes:69:0.2g:18g:0.7g:16g:0.7g:1mg
+Mango:150:0.6g:46g:2.8g:36g:1.6g:11mg
+Berries Mix:80:0.5g:21g:2g:15g:1g:2mg
+Carrots:41:0.2g:10g:2.3g:7g:2g:42mg
+Broccoli:55:0.6g:11g:2.4g:3g:3g:47mg
+Cauliflower:25:0.3g:5g:2g:2g:1g:16mg
+Tomatoes:22:0.2g:5g:1.2g:2g:1g:6mg
+Oranges (Juice):112:0.5g:26g:2.4g:21g:2g:1mg
+Strawberry Jam:50:0.3g:13g:0.7g:10g:0.5g:2mg
+Pineapple Juice:132:0.2g:33g:1g:25g:1g:2mg
+Watermelon Smoothie:90:0.5g:22g:1.8g:18g:1g:1mg
+Spinach Dip:120:1g:8g:4g:2g:3g:95mg
+Lettuce Wrap:150:1g:10g:3g:2g:2g:15mg
+Cucumber Salad:45:0.3g:11g:1.5g:4g:1g:4mg
+Egg Sandwich:320:14g:26g:18g:2g:10g:340mg
+Tuna Sandwich:280:8g:28g:16g:3g:12g:550mg
+Chicken Salad:280:12g:10g:25g:2g:5g:480mg
+Ham and CheeseWrap:250:12g:20g:15g:2g:8g:720mg
+Turkey Burger:320:15g:30g:18g:2g:10g:680mg
+Salmon Fillet:206:13g:0g:20g:0g:10g:60mg
+Brown Rice:215:2g:45g:5g:2g:5g:0mg
+Quinoa Salad:220:6g:39g:8g:5g:9g:13mg
+Whole Wheat Bread:80:1g:15g:2g:2g:3g:120mg
+Pasta (cooked):200:2g:40g:7g:2g:8g:0mg
+Cheese Pizza:285:12g:36g:13g:2g:12g:550mg
+Hamburger:250:12g:25g:12g:2g:8g:480mg
+Hot Dog:150:5g:2g:6g:0g:6g:560mg
+French Fries:365:17g:63g:4g:6g:3g:6mg
+Onion Rings:410:20g:56g:6g:4g:5g:2mg
+Fried Chicken:335:20g:11g:24g:1g:14g:930mg
+Ice Cream (Vanilla):267:14g:31g:3g:1g:5g:55mg
+Apple Pie:320:13g:49g:2g:3g:2g:160mg
+Brownie:226:12g:29g:3g:2g:3g:70mg
+Pancakes:220:6g:34g:6g:2g:6g:400mg
+Waffles:210:9g:27g:4g:1g:5g:380mg
+Omelette:220:15g:2g:18g:0g:14g:350mg
+Bacon and Egg Sandwich:450:25g:30g:21g:2g:15g:780mg
+Fruit Salad:120:0.5g:30g:2g:25g:2g:3mg
+Granola Bar:190:8g:29g:2g:1g:4g:90mg
+Yogurt (Plain):100:3g:18g:5g:0g:10g:50mg
+Milk (1 cup):103:3.4g:12g:8g:0g:8g:100mg
+Orange Juice (1 cup):112:0.5g:26g:2.4g:21g:2g:1mg
+Green Tea (1 cup):2:0g:0g:0g:0g:0g:0mg
+Blueberries:83:0.4g:21g:1.5g:18g:1.5g:1mg
+Raspberries:64:0.7g:15g:1.5g:12g:1.5g:1mg
+Blackberries:62:0.7g:14g:1.5g:10g:1.5g:1mg
+Kiwi:61:0.5g:15g:2.1g:9g:1.1g:3mg
+Avocado:234:21g:12g:3g:9g:3g:14mg
+Almonds (1 oz):160:14g:6g:6g:3g:1g:0mg
+Walnuts (1 oz):185:18g:4g:4g:2g:1g:0mg
+Salmon Salad:280:15g:3g:25g:1g:10g:480mg
+Chicken Breast (Grilled):165:3.6g:0g:31g:0g:3.6g:50mg
+Turkey Breast (Roasted):135:1g:0g:30g:0g:3g:50mg
+Sweet Potato:112:0.1g:26g:3g:5g:2g:0mg
+Honey:304:0.3g:82g:0.3g:0.3g:0.3g:2mg
+Greek Yogurt (1 cup):100:0g:9g:15g:0g:11g:50mg
+Cottage Cheese (1 cup):220:10g:6g:28g:0g:2g:900mg
+Whole Milk (1 cup):149:8g:12g:8g:0g:8g:100mg
+Soy Milk (1 cup):131:4g:12g:8g:1g:6g:80mg
+Oatmeal (1 cup):158:3.2g:28g:4g:4g:3.2g:0mg
+Whole Grain Bread:69:1g:12g:2g:2g:2g:120mg
+Hummus:166:9g:14g:5g:7g:3g:0mg

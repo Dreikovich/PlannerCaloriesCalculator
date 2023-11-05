@@ -5,7 +5,6 @@ public class Main {
         dataRefreshThread.start();
         LoginGUI loginGUI = new LoginGUI();
         //Todo пофиксить баг с добавлением приема пищи когда он поторяется несколько раз в текстовом файле
-        //Todo добавить возможность удаления продукта из списка доступных продуктов
 
 
     }
