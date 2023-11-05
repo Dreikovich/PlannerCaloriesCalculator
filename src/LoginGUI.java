@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 public class LoginGUI {
     private Frame frame;
     private Label usernameLabel, passwordLabel;

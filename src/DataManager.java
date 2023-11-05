@@ -57,6 +57,5 @@ public class DataManager {
         String newData = String.join("\n", updatedFoods);
         ClearOldData("data/food.txt");
         DataManager.writeToFile("data/food.txt", newData);
-
     }
 }

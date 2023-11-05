@@ -1,5 +1,3 @@
-
-
 public class LoginController {
     private static final String FILE_NAME = "data/userData.txt";
     public boolean authenticateUser(String login, String password) {
@@ -15,11 +13,7 @@ public class LoginController {
         }
         return false;
     }
-       public void openPlannerGui() {
+    public void openPlannerGui() {
         PlannerGUI plannerGUI = new PlannerGUI();
     }
-
-
-
-
 }

@@ -5,6 +5,4 @@ public class DataHelper {
                 food.getProtein() + ":" + food.getFiber() + ":" +
                 food.getSugar() + ":" + food.getSodium();
     }
-
-
 }
