@@ -6,10 +6,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 
 public class PlannerGUI {
@@ -143,13 +141,17 @@ public class PlannerGUI {
         // Create checkboxes for available foods
         checkboxPanel.removeAll();
         foodCheckboxes.clear();
+        // create checkboxes for available foods and insert them into the map table
         for (Food food : availableFoods) {
             Checkbox checkbox = new Checkbox(food.getFoodItem());
             foodCheckboxes.put(food.getFoodItem(), checkbox);
         }
-        for (Checkbox checkbox : foodCheckboxes.values()) {
-            checkboxPanel.add(checkbox);
-
+        // Sort checkboxes alphabetically
+        List<Map.Entry<String, Checkbox>> entryList = new ArrayList<>(foodCheckboxes.entrySet());
+        Collections.sort(entryList, Comparator.comparing(Map.Entry::getKey));
+        //add checkboxes to the panel
+        for (Map.Entry<String, Checkbox> entry : entryList) {
+            checkboxPanel.add(entry.getValue());
         }
         frame.add(checkboxPanel, BorderLayout.WEST);
         selectedFoodsTextArea.setVisible(true);
