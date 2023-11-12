@@ -1,6 +1,9 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 public class CustomFoodDialogGUI extends Frame
 {
     private TextField foodNameField;
@@ -27,26 +30,35 @@ public class CustomFoodDialogGUI extends Frame
         sugarField = new TextField();
         sodiumField = new TextField();
 
+
         Button addButton = new Button("Add");
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String foodName = foodNameField.getText();
-                int calories = Integer.parseInt(caloriesField.getText());
-                double fats = Double.parseDouble(fatsField.getText());
-                double carbs = Double.parseDouble(carbsField.getText());
-                double proteins = Double.parseDouble(proteinsField.getText());
-                double fiber = Double.parseDouble(fiberField.getText());
-                double sugar = Double.parseDouble(sugarField.getText());
-                double sodium = Double.parseDouble(sodiumField.getText());
 
-                Food customFood = new Food(foodName, calories, fats, carbs, proteins, fiber, sugar, sodium);
-                DataManager.writeToFile("data/food.txt", DataHelper.formatFoodData(customFood));
-                parentFrame.setVisible(true); // Show the parent frame after adding the food
-
-                dispose(); // Close the dialog after adding the food
+                if(checkIfAllFieldsAreFilled()){
+                    System.out.println("All fields are filled");
+                    String foodName = foodNameField.getText();
+                    int calories = Integer.parseInt(caloriesField.getText());
+                    double fats = Double.parseDouble(fatsField.getText());
+                    double carbs = Double.parseDouble(carbsField.getText());
+                    double proteins = Double.parseDouble(proteinsField.getText());
+                    double fiber = Double.parseDouble(fiberField.getText());
+                    double sugar = Double.parseDouble(sugarField.getText());
+                    double sodium = Double.parseDouble(sodiumField.getText());
+                    Food customFood = new Food(foodName, calories, fats, carbs, proteins, fiber, sugar, sodium);
+                    DataManager.writeToFile("data/food.txt", DataHelper.formatFoodData(customFood));
+                    parentFrame.setVisible(true); // Show the parent frame after adding the food
+                    dispose(); // Close the dialog after adding the food
+                }
+                else{
+                    System.out.println("All fields are not filled");
+                    AlertMessage alertMessage = new AlertMessage("Please fill all the fields");
+                }
             }
         });
+
 
         add(new Label("Food Name:"));
         add(foodNameField);
@@ -65,10 +77,28 @@ public class CustomFoodDialogGUI extends Frame
         add(new Label("Sodium (g):"));
         add(sodiumField);
         add(addButton);
-
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                parentFrame.setVisible(true);
+                dispose();
+            }
+        });
         pack();
         setLocationRelativeTo(parentFrame);
         setVisible(true);
 
     }
+    private boolean checkIfAllFieldsAreFilled() {
+        return !foodNameField.getText().isEmpty() &&
+                !caloriesField.getText().isEmpty() &&
+                !fatsField.getText().isEmpty() &&
+                !carbsField.getText().isEmpty() &&
+                !proteinsField.getText().isEmpty() &&
+                !fiberField.getText().isEmpty() &&
+                !sugarField.getText().isEmpty() &&
+                !sodiumField.getText().isEmpty();
+    }
+
+
 }

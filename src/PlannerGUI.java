@@ -194,6 +194,7 @@ public class PlannerGUI {
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
                 int scrollbarValue = verticalScrollbar.getValue();
+                Checkbox[] selectedCheckboxes = getSelectedCheckboxes();
                 checkboxPanel.removeAll();
 
                 // Calculate the range of checkboxes to display based on the scrollbar value
@@ -206,9 +207,10 @@ public class PlannerGUI {
                 // Add checkboxes within the visible range to the panel
                 for(int i=startIndex;i<endIndex;i++){
                     Checkbox checkbox = new Checkbox(availableFoods.get(i).getFoodItem());
-                    foodCheckboxes.put(availableFoods.get(i).getFoodItem(), checkbox);
                     checkboxPanel.add(checkbox);
+                    foodCheckboxes.put(availableFoods.get(i).getFoodItem(), checkbox);
                 }
+                reselectCheckboxes(selectedCheckboxes);
                 checkboxPanel.revalidate();
                 checkboxPanel.repaint();
             }
@@ -222,6 +224,22 @@ public class PlannerGUI {
         /*frame.add(checkboxPanel, BorderLayout.WEST);*/
         selectedFoodsTextArea.setVisible(true);
         frame.pack();
+    }
+
+    private Checkbox[] getSelectedCheckboxes() {
+        List<Checkbox> selectedCheckboxes = new ArrayList<>();
+        for (Map.Entry<String, Checkbox> entry : foodCheckboxes.entrySet()) {
+            if (entry.getValue().getState()) {
+                selectedCheckboxes.add(entry.getValue());
+            }
+        }
+        return selectedCheckboxes.toArray(new Checkbox[0]);
+    }
+
+    private void reselectCheckboxes(Checkbox[] selectedCheckboxes) {
+        for (Checkbox checkbox : selectedCheckboxes) {
+            foodCheckboxes.get(checkbox.getLabel()).setState(true);
+        }
     }
 
     private void PrintSelectedFoodInTheConsole(){
