@@ -1,4 +1,3 @@
-Apples:95:0.3g:25g:0.5g:19g:0.5g:1mg
 Bananas:105:0.3g:27g:1.3g:14g:1g:1mg
 Grapes:69:0.2g:18g:0.7g:16g:0.7g:1mg
 Mango:150:0.6g:46g:2.8g:36g:1.6g:11mg
@@ -31,7 +30,6 @@ French Fries:365:17g:63g:4g:6g:3g:6mg
 Onion Rings:410:20g:56g:6g:4g:5g:2mg
 Fried Chicken:335:20g:11g:24g:1g:14g:930mg
 Ice Cream (Vanilla):267:14g:31g:3g:1g:5g:55mg
-Apple Pie:320:13g:49g:2g:3g:2g:160mg
 Brownie:226:12g:29g:3g:2g:3g:70mg
 Pancakes:220:6g:34g:6g:2g:6g:400mg
 Waffles:210:9g:27g:4g:1g:5g:380mg
@@ -62,3 +60,4 @@ Soy Milk (1 cup):131:4g:12g:8g:1g:6g:80mg
 Oatmeal (1 cup):158:3.2g:28g:4g:4g:3.2g:0mg
 Whole Grain Bread:69:1g:12g:2g:2g:2g:120mg
 Hummus:166:9g:14g:5g:7g:3g:0mg
+Apple 2:1:1.0:1.0:1.0:1.0:1.0:1.0

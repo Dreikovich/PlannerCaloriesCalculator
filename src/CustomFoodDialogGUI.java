@@ -43,6 +43,7 @@ public class CustomFoodDialogGUI extends Frame
                 Food customFood = new Food(foodName, calories, fats, carbs, proteins, fiber, sugar, sodium);
                 DataManager.writeToFile("data/food.txt", DataHelper.formatFoodData(customFood));
                 parentFrame.setVisible(true); // Show the parent frame after adding the food
+
                 dispose(); // Close the dialog after adding the food
             }
         });

@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 public class RefreshData {
     private static int refreshCount = 0;
     private static List<Food> availableFoods;
+
+    private static List<Meal> meals;
     private static boolean dataLoaded = false;
     private static final int MAX_REFRESH_COUNT = 1000;
     public static boolean condition() {
@@ -21,6 +23,7 @@ public class RefreshData {
         Runnable runnable = () -> {
             refreshAvailableFoods();
             refreshCount++;
+            writeToFilePeriodically();
             System.out.println("Data refreshed. The size of available data now is " + availableFoods.size());
             if (condition()) {
                 service.shutdown();
@@ -30,6 +33,27 @@ public class RefreshData {
         int period = 10;
         service.scheduleAtFixedRate(runnable, initialDelay, period, TimeUnit.SECONDS);
     }
+
+    public static void writeToFilePeriodically() {
+        String fileName = "data/meal.txt";
+        System.out.println("Writing data to file function entered");
+
+        try {
+            meals = PlannerGUI.getMeals();
+            if(meals == null){
+               return;
+            }
+            for (Meal meal : meals) {
+                DataManager.writeTheMealToTheFile(fileName, meal);
+                System.out.println("Data written to file");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     public static synchronized void refreshAvailableFoods() {
         try {

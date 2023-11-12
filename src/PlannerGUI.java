@@ -11,7 +11,7 @@ public class PlannerGUI {
     private final Frame frame;
     private List<Food> availableFoods;
     private List<Food> selectedFoods;
-    private final List<Meal> meals;
+    private static List<Meal> meals;
     private final  Map<String, Checkbox> foodCheckboxes;
     private final TextArea selectedFoodsTextArea;
     private JFrame mealsFrame;
@@ -20,9 +20,7 @@ public class PlannerGUI {
     private JTextField proteinsField;
     private JTextField fatsField;
     private JTextField carbsField;
-
-
-
+    
     public PlannerGUI() {
         meals = new ArrayList<>();
         frame = new Frame("Planner Page");
@@ -45,6 +43,7 @@ public class PlannerGUI {
         Button addCustomFoodToTheFoodData = new Button("Add custom food");
         Button refreshButton = new Button("Refresh Data");
         refreshButton.addActionListener(e -> {
+            RefreshData.refreshAvailableFoods();
             availableFoods = RefreshData.getAvailableFoods();
             System.out.println("Data refreshed. The size of available data now is " + availableFoods.size());
             showAvailableFoodCheckboxes(checkboxPanel, containerPanel);
@@ -66,6 +65,9 @@ public class PlannerGUI {
         addCustomFoodToTheFoodData.addActionListener(e -> {
             CustomFoodDialogGUI customFoodDialogGUI = new CustomFoodDialogGUI(frame);
             frame.setVisible(false);
+            availableFoods = RefreshData.getAvailableFoods();
+            System.out.println("Data refreshed. The size of available data now is " + availableFoods.size());
+            showAvailableFoodCheckboxes(checkboxPanel, containerPanel);
 
         });
 
@@ -105,6 +107,9 @@ public class PlannerGUI {
         frame.add(buttonPanel, BorderLayout.SOUTH);
         frame.pack();
         frame.setVisible(true);
+    }
+    public static List<Meal> getMeals() {
+        return meals;
     }
 
     private void FillTheListSelectedFood(){
@@ -155,8 +160,8 @@ public class PlannerGUI {
     private void showAvailableFoodCheckboxes(Panel checkboxPanel, Panel containerPanel) {
         // Create checkboxes for available foods
         checkboxPanel.removeAll();
+        containerPanel.removeAll();
         foodCheckboxes.clear();
-
 
         int visibleCheckboxCount = 20;
         int checkboxWidth = 200;
@@ -180,8 +185,7 @@ public class PlannerGUI {
         for (Map.Entry<String, Checkbox> entry : entryList) {
             checkboxPanel.add(entry.getValue());
         }
-        Scrollbar verticalScrollbar = new Scrollbar(Scrollbar.VERTICAL, 0, 1, 0, availableFoods.size());
-
+        Scrollbar verticalScrollbar = new Scrollbar(Scrollbar.VERTICAL, 0, visibleCheckboxCount, 0, availableFoods.size());
 
         containerPanel.setLayout(new BorderLayout());
         containerPanel.add(checkboxPanel, BorderLayout.CENTER);
@@ -209,14 +213,15 @@ public class PlannerGUI {
                 checkboxPanel.repaint();
             }
         });
-
         checkboxPanel.setPreferredSize(new Dimension(checkboxWidth, visibleCheckboxCount * checkboxPanel.getComponent(0).getPreferredSize().height));
+        verticalScrollbar.setValue(0);
+        checkboxPanel.revalidate();
+        checkboxPanel.repaint();
         frame.add(containerPanel, BorderLayout.WEST);
 
         /*frame.add(checkboxPanel, BorderLayout.WEST);*/
         selectedFoodsTextArea.setVisible(true);
         frame.pack();
-
     }
 
     private void PrintSelectedFoodInTheConsole(){
