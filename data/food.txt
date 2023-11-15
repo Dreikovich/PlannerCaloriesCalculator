@@ -34,7 +34,6 @@ Brownie:226:12g:29g:3g:2g:3g:70mg
 Pancakes:220:6g:34g:6g:2g:6g:400mg
 Waffles:210:9g:27g:4g:1g:5g:380mg
 Omelette:220:15g:2g:18g:0g:14g:350mg
-Bacon and Egg Sandwich:450:25g:30g:21g:2g:15g:780mg
 Fruit Salad:120:0.5g:30g:2g:25g:2g:3mg
 Granola Bar:190:8g:29g:2g:1g:4g:90mg
 Yogurt (Plain):100:3g:18g:5g:0g:10g:50mg
@@ -45,7 +44,6 @@ Blueberries:83:0.4g:21g:1.5g:18g:1.5g:1mg
 Raspberries:64:0.7g:15g:1.5g:12g:1.5g:1mg
 Blackberries:62:0.7g:14g:1.5g:10g:1.5g:1mg
 Kiwi:61:0.5g:15g:2.1g:9g:1.1g:3mg
-Avocado:234:21g:12g:3g:9g:3g:14mg
 Almonds (1 oz):160:14g:6g:6g:3g:1g:0mg
 Walnuts (1 oz):185:18g:4g:4g:2g:1g:0mg
 Salmon Salad:280:15g:3g:25g:1g:10g:480mg
@@ -60,4 +58,3 @@ Soy Milk (1 cup):131:4g:12g:8g:1g:6g:80mg
 Oatmeal (1 cup):158:3.2g:28g:4g:4g:3.2g:0mg
 Whole Grain Bread:69:1g:12g:2g:2g:2g:120mg
 Hummus:166:9g:14g:5g:7g:3g:0mg
-Apple 2:1:1.0:1.0:1.0:1.0:1.0:1.0

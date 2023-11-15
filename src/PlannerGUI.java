@@ -6,21 +6,60 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
-
+/**
+ * PlannerGUI class
+ */
 public class PlannerGUI {
+    /**
+     * this field is used to store the frame
+     */
     private final Frame frame;
+    /**
+     * this field is used to store the available foods
+     */
     private List<Food> availableFoods;
+    /**
+     * this field is used to store the selected foods
+     */
     private List<Food> selectedFoods;
+    /**
+     * this field is used to store the meals
+     */
     private static List<Meal> meals;
+    /**
+     * this field is used to store the food checkboxes
+     */
     private final  Map<String, Checkbox> foodCheckboxes;
+    /**
+     * this field is used to store the selected foods text area
+     */
     private final TextArea selectedFoodsTextArea;
+    /**
+     * this field is used to store the meals frame
+     */
     private JFrame mealsFrame;
+    /**
+     * this field is used to store the calories field
+     */
 
     private JTextField caloriesField;
+    /**
+     * this field is used to store the proteins field
+     */
     private JTextField proteinsField;
+    /**
+     * this field is used to store the fats field
+     */
     private JTextField fatsField;
+    /**
+     * this field is used to store the carbs field
+     */
     private JTextField carbsField;
-    
+
+    /**
+     * PlannerGUI
+     * This constructor creates a frame with all the information
+     */
     public PlannerGUI() {
         meals = new ArrayList<>();
         frame = new Frame("Planner Page");
@@ -108,10 +147,18 @@ public class PlannerGUI {
         frame.pack();
         frame.setVisible(true);
     }
+    /**
+     * getMeals
+     * This method returns the meals
+     * @return meals
+     */
     public static List<Meal> getMeals() {
         return meals;
     }
-
+    /**
+     * FillTheListSelectedFood
+     * This method fills the list of selected food
+     */
     private void FillTheListSelectedFood(){
         selectedFoods = new ArrayList<>();
         List<String> tempWithSelectedFoods = new ArrayList<>();
@@ -129,34 +176,12 @@ public class PlannerGUI {
         }
 
     }
-
-    private List<Food> readAvailableFoodsFromFile() {
-        String data = DataManager.readFromFile("data/food.txt");
-        List<Food> foods = new ArrayList<>();
-        if (!data.isEmpty()) {
-            String[] foodItems = data.split("\n");
-            for (String foodItem : foodItems) {
-                String[] parts = foodItem.split(":");
-                if(parts.length==8){
-                    //Calories, Fats(g):Carbs(g):Protein(g):Fiber(g):Sugar(g):Sodium
-                    String foodName = parts[0].trim();
-                    int calories = Integer.parseInt(parts[1].trim());
-                    double fats = parseGrams(parts[2].trim());
-                    double carbs = parseGrams(parts[3].trim());
-                    double proteins = parseGrams(parts[4].trim());
-                    double fiber = parseGrams(parts[5].trim());
-                    double sugar = parseGrams(parts[6].trim());
-                    double sodium = parseGrams(parts[7].trim());
-                    Food food = new Food(foodName, calories, fats, carbs, proteins, fiber, sugar, sodium);
-                    foods.add(food);
-                } else {
-                    System.out.println("Invalid data format: " + foodItem);
-                }
-            }
-        }
-        return foods;
-    }
-
+    /**
+     * showAvailableFoodCheckboxes
+     * This method shows the available food checkboxes
+     * @param checkboxPanel checkbox panel
+     * @param containerPanel container panel
+     */
     private void showAvailableFoodCheckboxes(Panel checkboxPanel, Panel containerPanel) {
         // Create checkboxes for available foods
         checkboxPanel.removeAll();
@@ -225,7 +250,11 @@ public class PlannerGUI {
         selectedFoodsTextArea.setVisible(true);
         frame.pack();
     }
-
+    /**
+     * getSelectedCheckboxes
+     * This method returns the selected checkboxes
+     * @return selectedCheckboxes
+     */
     private Checkbox[] getSelectedCheckboxes() {
         List<Checkbox> selectedCheckboxes = new ArrayList<>();
         for (Map.Entry<String, Checkbox> entry : foodCheckboxes.entrySet()) {
@@ -235,29 +264,29 @@ public class PlannerGUI {
         }
         return selectedCheckboxes.toArray(new Checkbox[0]);
     }
-
+    /**
+     * reselectCheckboxes
+     * This method reselects the checkboxes
+     * @param selectedCheckboxes selected checkboxes
+     */
     private void reselectCheckboxes(Checkbox[] selectedCheckboxes) {
         for (Checkbox checkbox : selectedCheckboxes) {
             foodCheckboxes.get(checkbox.getLabel()).setState(true);
         }
     }
-
+    /**
+     * PrintSelectedFoodInTheConsole
+     * This method prints the selected food in the console
+     */
     private void PrintSelectedFoodInTheConsole(){
         for(Food food : selectedFoods ){
             food.toString();
         }
     }
-
-    private double parseGrams(String value) {
-        if (value.endsWith("mg")) {
-            return Double.parseDouble(value.substring(0, value.length() - 2)) / 1000.0;
-        } else if (value.endsWith("g")) {
-            return Double.parseDouble(value.substring(0, value.length() - 1));
-        } else {
-            return 0.0;
-        }
-    }
-
+    /**
+     * updateSelectedFoodsTextArea
+     * This method updates the selected foods text area
+     */
     private void updateSelectedFoodsTextArea() {
         selectedFoodsTextArea.setText("");
         Font font = new Font("Arial", Font.PLAIN, 14); // Create a font
@@ -276,7 +305,10 @@ public class PlannerGUI {
             selectedFoodsTextArea.append("Sodium: " + food.getSodium() + "g\n\n");
         }
     }
-
+    /**
+     * initializeMealsFrame
+     * This method initializes the meals frame
+     */
     private void initializeMealsFrame() {
         if (mealsFrame == null) {
             mealsFrame = new JFrame("Meals");
@@ -287,7 +319,12 @@ public class PlannerGUI {
             mealsFrame.getContentPane().removeAll();
         }
     }
-
+    /**
+     * prepareTableData
+     * This method prepares the table data
+     * @param maxFoodCount maximum food count
+     * @return data
+     */
     private String[][] prepareTableData(int maxFoodCount) {
         String[][] data = new String[meals.size()][maxFoodCount + 2];
         for (int i = 0; i < meals.size(); i++) {
@@ -309,11 +346,22 @@ public class PlannerGUI {
         }
         return data;
     }
-
+    /**
+     * createTableModel
+     * This method creates the table model
+     * @param data data
+     * @param columns columns
+     * @return model
+     */
     private DefaultTableModel createTableModel(String[][] data, String[] columns) {
         return new DefaultTableModel(data, columns);
     }
-
+    /**
+     * createTableCellRenderer
+     * This method creates the table cell renderer
+     * @param finalMaxFoodCount final maximum food count
+     * @return component
+     */
     private DefaultTableCellRenderer createTableCellRenderer(int finalMaxFoodCount) {
         return new DefaultTableCellRenderer() {
             @Override
@@ -330,7 +378,13 @@ public class PlannerGUI {
             }
         };
     }
-
+    /**
+     * addRemoveMouseListener
+     * This method adds the remove mouse listener
+     * @param table table
+     * @param model model
+     * @param finalMaxFoodCount final maximum food count
+     */
     private void addRemoveMouseListener(JTable table, DefaultTableModel model, int finalMaxFoodCount) {
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -344,6 +398,11 @@ public class PlannerGUI {
             }
         });
     }
+    /**
+     * calculateMaxFoodCount
+     * This method calculates the maximum food count
+     * @return maxFoodCount
+     */
     private int calculateMaxFoodCount() {
         int maxFoodCount = 0;
         for (Meal meal : meals) {
@@ -354,7 +413,12 @@ public class PlannerGUI {
         }
         return maxFoodCount;
     }
-
+    /**
+     * prepareColumns
+     * This method prepares the columns
+     * @param maxFoodCount maximum food count
+     * @return columns
+     */
     private String[] prepareColumns(int maxFoodCount) {
         String[] columns = new String[maxFoodCount + 2];
         columns[0] = "Meal Number";
@@ -364,7 +428,13 @@ public class PlannerGUI {
         columns[maxFoodCount + 1] = "Remove";
         return columns;
     }
-
+    /**
+     * configureAndShowMealsFrame
+     * This method configures and shows the meals frame
+     * @param model model
+     * @param table table
+     * @param finalMaxFoodCount final maximum food count
+     */
     private void configureAndShowMealsFrame(DefaultTableModel model, JTable table, int finalMaxFoodCount) {
         table.setRowHeight(30);
         table.setShowVerticalLines(true);
@@ -380,7 +450,10 @@ public class PlannerGUI {
             }
         });
     }
-
+    /**
+     * displayMeals
+     * This method displays the meals table
+     */
     public void displayMeals() {
         initializeMealsFrame();
 
@@ -423,7 +496,5 @@ public class PlannerGUI {
 
         calculatorPanel.add(calculateCaloriesButton);
         mealsFrame.add(calculatorPanel, BorderLayout.SOUTH);
-
     }
-
 }

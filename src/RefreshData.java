@@ -8,16 +8,36 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class is responsible for refreshing data
+ */
 public class RefreshData {
+    /**
+     * This field is used to store the refresh count
+     */
     private static int refreshCount = 0;
+    /**
+     * This field is used to store the available foods
+     */
     private static List<Food> availableFoods;
-
+    /**
+     * This field is used to store the meals
+     */
     private static List<Meal> meals;
-    private static boolean dataLoaded = false;
+    /**
+     * This field is used to store the maximum refresh count
+     */
     private static final int MAX_REFRESH_COUNT = 1000;
+    /**
+     * This method checks the condition
+     * @return true if the condition is met, false otherwise
+     */
     public static boolean condition() {
         return refreshCount >= MAX_REFRESH_COUNT;
     }
+    /**
+     * This method starts the data refresh
+     */
     public static void startDataRefresh() {
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
         Runnable runnable = () -> {
@@ -33,7 +53,9 @@ public class RefreshData {
         int period = 10;
         service.scheduleAtFixedRate(runnable, initialDelay, period, TimeUnit.SECONDS);
     }
-
+    /**
+     * This method writes data to the file periodically
+     */
     public static void writeToFilePeriodically() {
         String fileName = "data/meal.txt";
         System.out.println("Writing data to file function entered");
@@ -53,8 +75,9 @@ public class RefreshData {
 
     }
 
-
-
+    /**
+     * This method refreshes the available foods
+     */
     public static synchronized void refreshAvailableFoods() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("data/food.txt"));
@@ -76,11 +99,18 @@ public class RefreshData {
             System.out.println("Error reading food data: " + e.getMessage());
         }
     }
-
+    /**
+     * This method gets the available foods
+     * @return available foods
+     */
     public static List<Food> getAvailableFoods() {
         return availableFoods;
     }
-
+    /**
+     * This method parses the grams
+     * @param value value
+     * @return parsed grams
+     */
     private static double parseGrams(String value) {
         if (value.endsWith("mg")) {
             return Double.parseDouble(value.substring(0, value.length() - 2)) / 1000.0;
@@ -90,10 +120,4 @@ public class RefreshData {
             return 0.0;
         }
     }
-
-    public static boolean isDataLoaded() {
-        return dataLoaded;
-    }
-
-
 }

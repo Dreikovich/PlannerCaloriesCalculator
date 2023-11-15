@@ -3,8 +3,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is responsible for reading and writing data to files
+ */
 public class DataManager {
-
+    /**
+     * This method writes meal to the file if the meal does not already exist
+     * @param fileName file name
+     * @param meal food object
+     */
     public static void writeTheMealToTheFile(String fileName, Meal meal){
         String data = DataHelper.formatMealData(meal);
         data = DataHelper.getCurrentTime() + ";" + data;
@@ -13,6 +20,11 @@ public class DataManager {
         }
 
     }
+    /**
+     * This method writes food to the file if the food does not already exist
+     * @param fileName file name
+     * @param data food object
+     */
     public static void writeToFile(String fileName, String data){
         try(FileWriter writer = new FileWriter(fileName, true)){
             //check if the existing file is empty
@@ -28,7 +40,11 @@ public class DataManager {
             System.err.println("Error writing to file: " + ex.getMessage());
         }
     }
-
+    /**
+     * This method reads data from the file
+     * @param fileName file name
+     * @return data from the file
+     */
     public static String readFromFile(String fileName){
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
@@ -41,6 +57,10 @@ public class DataManager {
         }
         return content.toString();
     }
+    /**
+     * This method clears the content of the file
+     * @param fileName file name
+     */
     public static void ClearOldData(String fileName) {
         try (PrintWriter writer = new PrintWriter(fileName)) {
             // Clears the content of the file
@@ -49,7 +69,10 @@ public class DataManager {
             System.err.println("File not found: " + ex.getMessage());
         }
     }
-
+    /**
+     * This method deletes the food from the file
+     * @param food food object
+     */
     public static void deleteFood(Food food){
         String data = DataManager.readFromFile("data/food.txt");
         String[] foods = data.split("\n");
@@ -66,7 +89,12 @@ public class DataManager {
         ClearOldData("data/food.txt");
         DataManager.writeToFile("data/food.txt", newData);
     }
-
+    /**
+     * This method checks if the data already exists in the file
+     * @param data data to be checked
+     * @param fileName file name
+     * @return true if the data already exists in the file, false otherwise
+     */
     private static boolean isDataAlreadyExists(String data, String fileName){
         String fileData = readFromFile(fileName);
         if(fileData.equals("")){

@@ -4,17 +4,48 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * This class is responsible for creating a custom food dialog
+ */
 public class CustomFoodDialogGUI extends Frame
 {
-    private TextField foodNameField;
-    private TextField caloriesField;
-    private TextField fatsField;
-    private TextField carbsField;
-    private TextField proteinsField;
-    private TextField fiberField;
-    private TextField sugarField;
-    private  TextField sodiumField;
-
+    // Declare the components\
+    /**
+     * This field is used to store the food name
+     */
+    private final TextField foodNameField;
+    /**
+     * This field is used to store the calories
+     */
+    private final TextField caloriesField;
+    /**
+     * This field is used to store the fats
+     */
+    private final TextField fatsField;
+    /**
+     * This field is used to store the carbs
+     */
+    private final TextField carbsField;
+    /**
+     * This field is used to store the proteins
+     */
+    private final TextField proteinsField;
+    /**
+     * This field is used to store the fiber
+     */
+    private final TextField fiberField;
+    /**
+     * This field is used to store the sugar
+     */
+    private final TextField sugarField;
+    /**
+     * This field is used to store the sodium
+     */
+    private final TextField sodiumField;
+    /**
+     * This constructor creates a custom food dialog
+     * @param parentFrame the parent frame
+     */
     public  CustomFoodDialogGUI(Frame parentFrame) {
 
         super("Add Custom Food");
@@ -85,10 +116,15 @@ public class CustomFoodDialogGUI extends Frame
             }
         });
         pack();
+
         setLocationRelativeTo(parentFrame);
         setVisible(true);
 
     }
+    /**
+     * This method checks if all the fields are filled
+     * @return true if all the fields are filled, false otherwise
+     */
     private boolean checkIfAllFieldsAreFilled() {
         return !foodNameField.getText().isEmpty() &&
                 !caloriesField.getText().isEmpty() &&

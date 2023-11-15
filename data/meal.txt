@@ -8,3 +8,6 @@
 2023/11/12 18:19:59;Meal 2:Carrots,Cheese Pizza,Chicken Salad,
 2023/11/12 18:24:29;Meal 3:
 2023/11/12 18:49:08;Meal 1:Avocado,Bacon and Egg Sandwich,Berries Mix,
+2023/11/12 18:53:06;Meal 1:Apple 2,Avocado,Bacon and Egg Sandwich,
+2023/11/15 18:46:10;Meal 1:Bananas,Berries Mix,
+2023/11/15 18:46:20;Meal 2:Whole Wheat Bread,Yogurt (Plain),

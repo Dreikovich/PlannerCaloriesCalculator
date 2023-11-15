@@ -1,12 +1,52 @@
+/**
+ * Food class that holds all the information about a food item
+ */
+
 public class Food {
+    /**
+     * The field is used to store the food item name
+     */
     private String foodItem;
+    /**
+     * The field is used to store the calories
+     */
     private int calories;
+    /**
+     * The field is used to store the fats
+     */
     private double fats;
+    /**
+     * The field is used to store the carbs
+     */
     private double carbs;
+    /**
+     * The field is used to store the protein
+     */
     private double protein;
+    /**
+     * The field is used to store the fiber
+     */
     private double fiber;
+    /**
+     * The field is used to store the sugar
+     */
     private double sugar;
+    /**
+     * The field is used to store the sodium
+     */
     private double sodium;
+    /**
+     * Food
+     * This constructor creates a food item with all the information
+     * @param foodItem
+     * @param calories
+     * @param fats
+     * @param carbs
+     * @param protein
+     * @param fiber
+     * @param sugar
+     * @param sodium
+     */
     public Food(String foodItem, int calories, double fats, double carbs, double protein, double fiber, double sugar, double sodium) {
         this.foodItem = foodItem;
         this.calories = calories;
@@ -18,7 +58,7 @@ public class Food {
         this.sodium = sodium;
     }
 
-    // Getters and Setters
+    // Getters
     public String getFoodItem() {
         return foodItem;
     }
@@ -49,38 +89,6 @@ public class Food {
 
     public double getSodium() {
         return sodium;
-    }
-
-    public void setFoodItem(String foodItem) {
-        this.foodItem = foodItem;
-    }
-
-    public void setCalories(int calories) {
-        this.calories = calories;
-    }
-
-    public void setFats(double fats) {
-        this.fats = fats;
-    }
-
-    public void setCarbs(double carbs) {
-        this.carbs = carbs;
-    }
-
-    public void setProtein(double protein) {
-        this.protein = protein;
-    }
-
-    public void setFiber(double fiber) {
-        this.fiber = fiber;
-    }
-
-    public void setSugar(double sugar) {
-        this.sugar = sugar;
-    }
-
-    public void setSodium(double sodium) {
-        this.sodium = sodium;
     }
 
     @Override
